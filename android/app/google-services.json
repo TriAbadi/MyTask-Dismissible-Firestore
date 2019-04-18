@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "829625220610",
+    "firebase_url": "https://flutter-17a28.firebaseio.com",
+    "project_id": "flutter-17a28",
+    "storage_bucket": "flutter-17a28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829625220610:android:6a91733dfdc15e11",
+        "android_client_info": {
+          "package_name": "com.example.trayapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829625220610-9fh77ih5e115ko0lqgp6gpvgg6hqok64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW-0rNsiI6IiIT0DfrAitlKBDHKi0jj2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829625220610-9fh77ih5e115ko0lqgp6gpvgg6hqok64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829625220610:android:025bf2afe96fc9f9",
+        "android_client_info": {
+          "package_name": "com.example.trayapp2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829625220610-snna3h18mmo9paslnd6qj1makc39dc7q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trayapp2",
+            "certificate_hash": "a597620f3b96c86451639406e090a8e9800812c7"
+          }
+        },
+        {
+          "client_id": "829625220610-9fh77ih5e115ko0lqgp6gpvgg6hqok64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW-0rNsiI6IiIT0DfrAitlKBDHKi0jj2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829625220610-9fh77ih5e115ko0lqgp6gpvgg6hqok64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
