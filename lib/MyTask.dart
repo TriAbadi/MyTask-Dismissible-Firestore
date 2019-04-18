@@ -20,7 +20,7 @@ class _MyTaskState extends State<MyTask> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(widget.user.displayName),
+      child: Text(widget.user.displayName,style: TextStyle(color: Colors.blue[100]),),
       
     );
   }
