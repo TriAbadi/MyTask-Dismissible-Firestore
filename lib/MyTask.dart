@@ -77,7 +77,7 @@ class _MyTaskState extends State<MyTask> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext context) => AddTask()));
+              MaterialPageRoute(builder: (BuildContext context) => AddTask(email:widget.user.email)));
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.green[200],

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class AddTask extends StatefulWidget {
+  AddTask({this.email});
+  final String email;
   @override
   _AddTaskState createState() => _AddTaskState();
 }
@@ -11,7 +14,8 @@ class _AddTaskState extends State<AddTask> {
 
   String _dateText = '';
 
- 
+  String newTask = '';
+  String note = '';
 
   Future<Null> _selectDueData(BuildContext context) async {
     final picked = await showDatePicker(
@@ -26,6 +30,19 @@ class _AddTaskState extends State<AddTask> {
         _dateText = "${picked.day}/${picked.month}/${picked.year}";
       });
     }
+  }
+
+  void _addData(){
+    Firestore.instance.runTransaction((Transaction transaction) async{
+      CollectionReference reference = Firestore.instance.collection('task');
+      await reference.add({
+          "email" : widget.email,
+          "title" : newTask,
+          "dueDate" : _dateText,
+          "note"  : note
+      }); 
+    });
+    Navigator.pop(context);
   }
 
   @override
@@ -67,6 +84,11 @@ class _AddTaskState extends State<AddTask> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              onChanged: (String str) {
+                setState(() {
+                  newTask = str;
+                });
+              },
               decoration: InputDecoration(
                   icon: Icon(Icons.dashboard),
                   hintText: "New Task",
@@ -96,6 +118,11 @@ class _AddTaskState extends State<AddTask> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              onChanged: (String str) {
+                setState(() {
+                  note = str;
+                });
+              },
               decoration: InputDecoration(
                   icon: Icon(Icons.note),
                   hintText: "Note",
@@ -103,7 +130,7 @@ class _AddTaskState extends State<AddTask> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top:100.0),
+            padding: const EdgeInsets.only(top: 100.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -112,7 +139,9 @@ class _AddTaskState extends State<AddTask> {
                     Icons.check,
                     size: 48.0,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _addData();
+                  },
                 ),
                 IconButton(
                   icon: Icon(
