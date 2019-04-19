@@ -76,8 +76,9 @@ class _MyTaskState extends State<MyTask> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext context) => AddTask(email:widget.user.email)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  AddTask(email: widget.user.email)));
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.green[200],
@@ -90,70 +91,115 @@ class _MyTaskState extends State<MyTask> {
           children: <Widget>[],
         ),
       ),
-      body: Container(
-          height: 170.0,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("img/balloon.jpeg"), fit: BoxFit.cover),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 8.0,
-              )
-            ], // color:Colors.blue--> pakai kalo pake image texture
+      body: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top:160.0),
+            child: StreamBuilder(
+              stream: Firestore.instance
+                  .collection("task")
+                  .where("email", isEqualTo: widget.user.email)
+                  .snapshots(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData)
+                  return Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+
+                return TaskList(
+                  document: snapshot.data.documents,
+                );
+              },
+            ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 60.0,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(widget.user.photoUrl),
-                              fit: BoxFit.cover)),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 18.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("Welcome",
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.white)),
-                            Text(widget.user.displayName,
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.exit_to_app,
-                          color: Colors.white, size: 30.0),
-                      onPressed: () {
-                        _signOut();
-                      },
-                    ),
-                  ],
-                ),
+          Container(
+              height: 170.0,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("img/balloon.jpeg"), fit: BoxFit.cover),
+
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 8.0,
+                  )
+                ], // color:Colors.blue--> pakai kalo pake image texture
               ),
-              Text("My Task",
-                  style: TextStyle(
-                    color: Colors.white, fontSize: 30.0,
-                    letterSpacing: 2.0,
-                    //fontFamily: "pacifico" ---> kalau mau ganti type font
-                  ))
-            ],
-          )),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 60.0,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: NetworkImage(widget.user.photoUrl),
+                                  fit: BoxFit.cover)),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 18.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("Welcome",
+                                    style: TextStyle(
+                                        fontSize: 18.0, color: Colors.white)),
+                                Text(widget.user.displayName,
+                                    style: TextStyle(
+                                        fontSize: 18.0, color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.exit_to_app,
+                              color: Colors.white, size: 30.0),
+                          onPressed: () {
+                            _signOut();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text("My Task",
+                      style: TextStyle(
+                        color: Colors.white, fontSize: 30.0,
+
+                        letterSpacing: 2.0,
+
+                        //fontFamily: "pacifico" ---> kalau mau ganti type font
+                      ))
+                ],
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class TaskList extends StatelessWidget {
+  TaskList({this.document});
+  final List<DocumentSnapshot> document;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: document.length,
+      itemBuilder: (BuildContext context, int i) {
+        String title = document[i].data['title'].toString();
+
+        return Text(title);
+      },
     );
   }
 }
