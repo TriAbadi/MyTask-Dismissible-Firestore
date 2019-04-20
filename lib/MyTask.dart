@@ -203,67 +203,81 @@ class TaskList extends StatelessWidget {
         String dueDate = "${_date.day}/${_date.month}/${_date.year}";
         
 
-        return Padding(
-          padding: const EdgeInsets.only(top:8.0,right: 16.0,left:16.0,bottom: 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                              child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom:8.0),
-                        child: Text(title,
-                            style: TextStyle(fontSize: 20.0, letterSpacing: 1.0)),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Icon(Icons.date_range, color: Colors.blue[200]),
-                          ),
-                          Text(dueDate,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                              )),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Icon(Icons.note, color: Colors.blue[200]),
-                          ),
-                          Expanded(
-                            child: Text(note,
+        return Dismissible( // --------------> To Delete with Dissmisible (Firestore)
+          key: Key(document[i].documentID),
+          onDismissed: (direction){
+            Firestore.instance.runTransaction((transaction) async{
+              DocumentSnapshot snapshot = await transaction.get(document[i].reference);
+              await transaction.delete(snapshot.reference);
+            });
+
+            Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text("Data Deleted"))
+            );
+
+          },
+                  child: Padding(
+            padding: const EdgeInsets.only(top:8.0,right: 16.0,left:16.0,bottom: 8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                                child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom:8.0),
+                          child: Text(title,
+                              style: TextStyle(fontSize: 20.0, letterSpacing: 1.0)),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(Icons.date_range, color: Colors.blue[200]),
+                            ),
+                            Text(dueDate,
                                 style: TextStyle(
                                   fontSize: 18.0,
                                 )),
-                          ),
-                        ],
-                      )
-                    ],
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(Icons.note, color: Colors.blue[200]),
+                            ),
+                            Expanded(
+                              child: Text(note,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                  )),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.edit,color: Colors.blue[200],),
-                onPressed: (){
-                  Navigator.of(context).push( MaterialPageRoute(
-                    builder: (BuildContext context)=> EditTask(
-                      title: title,
-                      note: note,
-                      dueDate : document[i].data['dueDate'],
-                      index: document[i].reference,
-                    )
-                  ));
-                },
+                IconButton(
+                  icon: Icon(Icons.edit,color: Colors.blue[200],),
+                  onPressed: (){
+                    Navigator.of(context).push( MaterialPageRoute(
+                      builder: (BuildContext context)=> EditTask(
+                        title: title,
+                        note: note,
+                        dueDate : document[i].data['dueDate'],
+                        index: document[i].reference,
+                      )
+                    ));
+                  },
 
-              )
-            ],
+                )
+              ],
+            ),
           ),
         );
       },
