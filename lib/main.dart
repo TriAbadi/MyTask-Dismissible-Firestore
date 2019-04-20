@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+      routes: <String, WidgetBuilder>{
+        '/home': (BuildContext context) => new MyHomePage(),
+      '/mytask': (BuildContext context) => new MyTask()}
     );
   }
 }

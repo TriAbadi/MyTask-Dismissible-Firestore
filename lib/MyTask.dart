@@ -36,8 +36,8 @@ class _MyTaskState extends State<MyTask> {
                 InkWell(
                   onTap: () {
                     widget.googleSignIn.signOut();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => MyHomePage()));
+                    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false); // ----->> to sign out method
+                    
                   },
                   child: Column(
                     children: <Widget>[
@@ -201,41 +201,43 @@ class TaskList extends StatelessWidget {
         String note = document[i].data['note'].toString();
         DateTime _date = document[i].data['dueDate'];
         String dueDate = "${_date.day}/${_date.month}/${_date.year}";
-        
 
-        return Dismissible( // --------------> To Delete with Dissmisible (Firestore)
+        return Dismissible(
+          // --------------> To Delete with Dissmisible (Firestore)
           key: Key(document[i].documentID),
-          onDismissed: (direction){
-            Firestore.instance.runTransaction((transaction) async{
-              DocumentSnapshot snapshot = await transaction.get(document[i].reference);
+          onDismissed: (direction) {
+            Firestore.instance.runTransaction((transaction) async {
+              DocumentSnapshot snapshot =
+                  await transaction.get(document[i].reference);
               await transaction.delete(snapshot.reference);
             });
 
-            Scaffold.of(context).showSnackBar(
-              SnackBar(content: Text("Data Deleted"))
-            );
-
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text("Data Deleted")));
           },
-                  child: Padding(
-            padding: const EdgeInsets.only(top:8.0,right: 16.0,left:16.0,bottom: 8.0),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                top: 8.0, right: 16.0, left: 16.0, bottom: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                                child: Container(
+                  child: Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(bottom:8.0),
+                          padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(title,
-                              style: TextStyle(fontSize: 20.0, letterSpacing: 1.0)),
+                              style: TextStyle(
+                                  fontSize: 20.0, letterSpacing: 1.0)),
                         ),
                         Row(
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(right: 16.0),
-                              child: Icon(Icons.date_range, color: Colors.blue[200]),
+                              child: Icon(Icons.date_range,
+                                  color: Colors.blue[200]),
                             ),
                             Text(dueDate,
                                 style: TextStyle(
@@ -263,18 +265,19 @@ class TaskList extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.edit,color: Colors.blue[200],),
-                  onPressed: (){
-                    Navigator.of(context).push( MaterialPageRoute(
-                      builder: (BuildContext context)=> EditTask(
-                        title: title,
-                        note: note,
-                        dueDate : document[i].data['dueDate'],
-                        index: document[i].reference,
-                      )
-                    ));
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue[200],
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => EditTask(
+                              title: title,
+                              note: note,
+                              dueDate: document[i].data['dueDate'],
+                              index: document[i].reference,
+                            )));
                   },
-
                 )
               ],
             ),
