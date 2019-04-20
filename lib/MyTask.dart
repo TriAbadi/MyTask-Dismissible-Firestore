@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trayapp2/AddTask.dart';
 import 'main.dart';
+import 'EditTask.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class MyTask extends StatefulWidget {
@@ -94,14 +95,14 @@ class _MyTaskState extends State<MyTask> {
       body: Stack(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top:160.0),
+            padding: const EdgeInsets.only(top: 160.0),
             child: StreamBuilder(
               stream: Firestore.instance
                   .collection("task")
                   .where("email", isEqualTo: widget.user.email)
                   .snapshots(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData)
                   return Container(
                     child: Center(
@@ -197,8 +198,67 @@ class TaskList extends StatelessWidget {
       itemCount: document.length,
       itemBuilder: (BuildContext context, int i) {
         String title = document[i].data['title'].toString();
+        String note = document[i].data['note'].toString();
+        String dueDate = document[i].data['dueDate'].toString();
 
-        return Text(title);
+        return Padding(
+          padding: const EdgeInsets.only(top:8.0,right: 16.0,left:16.0,bottom: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                              child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom:8.0),
+                        child: Text(title,
+                            style: TextStyle(fontSize: 20.0, letterSpacing: 1.0)),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Icon(Icons.date_range, color: Colors.blue[200]),
+                          ),
+                          Text(dueDate,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              )),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Icon(Icons.note, color: Colors.blue[200]),
+                          ),
+                          Expanded(
+                            child: Text(note,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                )),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.edit,color: Colors.blue[200],),
+                onPressed: (){
+                  Navigator.of(context).push( MaterialPageRoute(
+                    builder: (BuildContext context)=> EditTask()
+                  ));
+                },
+
+              )
+            ],
+          ),
+        );
       },
     );
   }
