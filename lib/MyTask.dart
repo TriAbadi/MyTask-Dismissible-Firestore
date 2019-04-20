@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trayapp2/AddTask.dart';
-import 'main.dart';
+
 import 'EditTask.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -26,7 +26,7 @@ class _MyTaskState extends State<MyTask> {
               child: Image.network(widget.user.photoUrl),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(top:16.0,bottom: 8.0,right: 16.0,left:16.0),
               child: Text("Sign Out ?", style: TextStyle(fontSize: 16.0)),
             ),
             Divider(),
