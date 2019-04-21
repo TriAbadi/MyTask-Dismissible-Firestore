@@ -281,6 +281,27 @@ class TaskList extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(
+                    Icons.delete,
+                    color: Colors.blue[200],
+                  ),
+                  onPressed: () {     
+                    Firestore.instance.runTransaction((transaction) async {
+              DocumentSnapshot snapshot = await transaction.get(document[i].reference);
+                   
+              await transaction.delete(snapshot.reference);
+            });
+                    
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (BuildContext context) => EditTask(
+                    //           title: title,
+                    //           note: note,
+                    //           dueDate: document[i].data['dueDate'],
+                    //           index: document[i].reference,
+                    //         )));
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
                     Icons.edit,
                     color: Colors.blue[200],
                   ),
@@ -293,7 +314,8 @@ class TaskList extends StatelessWidget {
                               index: document[i].reference,
                             )));
                   },
-                )
+                ),
+                
               ],
             ),
           ),
