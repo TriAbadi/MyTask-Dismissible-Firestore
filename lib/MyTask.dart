@@ -26,8 +26,7 @@ class _MyTaskState extends State<MyTask> {
               child: Image.network(widget.user.photoUrl),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, bottom: 8.0, right: 16.0, left: 16.0),
+              padding: const EdgeInsets.only(top:16.0,bottom: 8.0,right: 16.0,left:16.0),
               child: Text("Sign Out ?", style: TextStyle(fontSize: 16.0)),
             ),
             Divider(),
@@ -37,10 +36,8 @@ class _MyTaskState extends State<MyTask> {
                 InkWell(
                   onTap: () {
                     widget.googleSignIn.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/home',
-                        (Route<dynamic> route) =>
-                            false); // ----->> to sign out method
+                    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false); // ----->> to sign out method
+                    
                   },
                   child: Column(
                     children: <Widget>[
@@ -205,21 +202,34 @@ class TaskList extends StatelessWidget {
         DateTime _date = document[i].data['dueDate'];
         String dueDate = "${_date.day}/${_date.month}/${_date.year}";
 
-        return Dismissible(
-          // --------------> To Delete with Dissmisible (Firestore)
-          key: Key(document[i].documentID),
-          onDismissed: (direction) {
-            Firestore.instance.runTransaction((transaction) async {
-              DocumentSnapshot snapshot =
-                  await transaction.get(document[i].reference);
-              await transaction.delete(snapshot.reference);
-            });
+        Firestore.instance.collection('task').snapshots();
 
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text("Data Deleted"),
-              duration: Duration(seconds: 1),
-            ));
-          },
+
+
+        //  Firestore.instance.runTransaction((transaction) async {
+        //        DocumentSnapshot snapshot =
+        //            await transaction.get(document[i].reference);
+        //       await transaction.delete(snapshot.reference);
+        
+        //    });
+            return Stack(
+                      children: <Widget>[
+                        Container(
+                          
+
+        // return Dismissible(
+        //   // --------------> To Delete with Dissmisible (Firestore)
+        //   key: Key(document[i].documentID),
+        //   onDismissed: (direction) {
+        //     Firestore.instance.runTransaction((transaction) async {
+        //       DocumentSnapshot snapshot =
+        //           await transaction.get(document[i].reference);
+        //       await transaction.delete(snapshot.reference);
+        //     });
+
+        //     Scaffold.of(context)
+        //         .showSnackBar(SnackBar(content: Text("Data Deleted")));
+        //   },
           child: Padding(
             padding: const EdgeInsets.only(
                 top: 8.0, right: 16.0, left: 16.0, bottom: 8.0),
@@ -287,8 +297,12 @@ class TaskList extends StatelessWidget {
               ],
             ),
           ),
+        ),
+        Divider(),
+        ]
         );
       },
     );
+    
   }
 }
