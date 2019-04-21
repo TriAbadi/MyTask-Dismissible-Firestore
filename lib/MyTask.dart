@@ -26,7 +26,8 @@ class _MyTaskState extends State<MyTask> {
               child: Image.network(widget.user.photoUrl),
             ),
             Padding(
-              padding: const EdgeInsets.only(top:16.0,bottom: 8.0,right: 16.0,left:16.0),
+              padding: const EdgeInsets.only(
+                  top: 16.0, bottom: 8.0, right: 16.0, left: 16.0),
               child: Text("Sign Out ?", style: TextStyle(fontSize: 16.0)),
             ),
             Divider(),
@@ -36,8 +37,10 @@ class _MyTaskState extends State<MyTask> {
                 InkWell(
                   onTap: () {
                     widget.googleSignIn.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false); // ----->> to sign out method
-                    
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/home',
+                        (Route<dynamic> route) =>
+                            false); // ----->> to sign out method
                   },
                   child: Column(
                     children: <Widget>[
@@ -212,8 +215,10 @@ class TaskList extends StatelessWidget {
               await transaction.delete(snapshot.reference);
             });
 
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text("Data Deleted")));
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text("Data Deleted"),
+              duration: Duration(seconds: 1),
+            ));
           },
           child: Padding(
             padding: const EdgeInsets.only(
