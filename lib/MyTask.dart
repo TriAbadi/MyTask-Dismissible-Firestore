@@ -35,6 +35,7 @@ class _MyTaskState extends State<MyTask> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 InkWell(
+                  splashColor: Colors.blue[50],
                   onTap: () {
                     widget.googleSignIn.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
@@ -53,6 +54,7 @@ class _MyTaskState extends State<MyTask> {
                   ),
                 ),
                 InkWell(
+                  splashColor: Colors.blue[50],
                   onTap: () {
                     Navigator.pop(context);
                   },
